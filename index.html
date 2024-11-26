@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spin Wheel</title>
+    <!-- CSS -->
+    <style>
+        /* ตั้งค่า CSS ที่นี่ */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0D2501;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .container {
+            width: 500px;
+            height: 500px;
+            background-color: #ccc;
+            border-radius: 50%;
+            border: 15px solid #dde;
+            position: fixed;
+            top: 25%;
+            overflow: hidden;
+            transition: transform 4s ease-out;
+        }
+
+        .container div {
+            height: 50%;
+            width: 200px;
+            position: absolute;
+            clip-path: polygon(100% 0, 50% 100%, 0 0);
+            transform: translateX(-50%);
+            transform-origin: bottom;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            font-family: sans-serif;
+            color: #fff;
+            left: 135px;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+        }
+
+        .arrow::before {
+            content: "\1F817";
+            font-size: 50px;
+        }
+
+        #spin {
+            position: fixed;
+            top: 54%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            background-color: #e2e2e2;
+            text-transform: uppercase;
+            border: 8px solid #fff;
+            font-weight: bold;
+            font-size: 20px;
+            color: #a2a2a2;
+            width: 80px;
+            height: 80px;
+            font-family: sans-serif;
+            border-radius: 50%;
+            cursor: pointer;
+            outline: none;
+            letter-spacing: 1px;
+        }
+
+        #result {
+            position: fixed;
+            top: 90%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- HTML -->
+    <div class="container">
+        <div class="one">Classic & Signature Cocktail</div>
+        <div class="two">OnlyFun</div>
+        <div class="three">You did great this year</div>
+        <div class="four">Good Girls Swallow</div>
+        <div class="five">Whiskey 1 shot</div>
+        <div class="six">Money Shot</div>
+        <div class="seven">No Luck, Sad :(</div>
+        <div class="eight">Tequila 1 shot</div>
+        <div class="nine">Take It All In</div>
+        <div class="ten">Fastwork Voucher</div>
+    </div>
+    <button id="spin">Spin</button>
+    <div id="result">Result: <span id="finalValue">...</span></div>
+    <div class="arrow"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // JavaScript สำหรับการหมุนวงล้อ
+        let container = document.querySelector(".container");
+        let btn = document.getElementById("spin");
+        let finalValue = document.getElementById("finalValue");
+
+        let segments = [
+            "Classic & Signature Cocktail",
+            "OnlyFun",
+            "You did great this year, but Santa still not chose you",
+            "Good Girls Swallow",
+            "Whiskey 1 shot",
+            "Money Shot",
+            "No Luck, Sad :((",
+            "Tequila 1 shot",
+            "Take It All In",
+            "Fastwork Voucher",
+        ];
+
+        let clicks = 0;
+
+        btn.onclick = function () {
+            clicks += 1;
+            let randomDegree = Math.floor(Math.random() * 360 + clicks * 3600);
+            container.style.transition = "transform 4s ease-out";
+            container.style.transform = `rotate(${randomDegree}deg)`;
+
+            setTimeout(() => {
+                container.style.transition = "none";
+                let normalizedDegree = randomDegree % 360;
+                container.style.transform = `rotate(${normalizedDegree}deg)`;
+
+                let segmentIndex = Math.floor(
+                    (360 - normalizedDegree) / (360 / segments.length)
+                ) % segments.length;
+
+                finalValue.textContent = segments[segmentIndex];
+            }, 4000);
+        };
+    </script>
+</body>
+</html>
